@@ -8,7 +8,7 @@
 
 - [Week 1](./week%201): 1주차 - 입력받은 값의 타입 확인 및 변환 (민기)
 - [Week 2](./week%202): 2주차 - UPDOWN 게임(숫자 맞추기) (태훈.리믹스)
-- [Week 3 ~ 4](./week%203%20~%204): 3~4주차 - 사이드프로젝트 [TodoList]()
+- [Week 3 ~ 4](./week%203%20~%204): 3~4주차 - 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git)
 - [Week 5](./week%205): 5주차 - 행운의 숫자? (호준.리믹스)
 - ...
 
