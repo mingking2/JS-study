@@ -7,8 +7,11 @@
 각 주차별로 디렉토리가 구성되어 있습니다. 아래는 주차별 디렉토리의 목록입니다:
 
 - [Week 1](./week%201): 입력받은 값의 타입 확인 및 변환 (민기)
-- [Week 2](./week%202): UPDOWN 게임(숫자 맞추기) (태훈.리믹스)
-- [Week 3,4](./week%203,4): 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git)
+- [Week 2](./week%202): UPDOWN 게임(숫자 맞추기) (태훈.리믹스), 
+                        보고서 #1 var, let, const 키워드와 블록 레벨 스코프
+- [Week 3](./week%203): 보고서 #2 순수 함수와 비순수 함수
+- [Week 4](./week%204): 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git), 
+                        보고서 #3 프로토타입과 __proto__ 접근자 프로퍼티
 - [Week 5](./week%205): 행운의 숫자? (호준.리믹스)
 - ...
 
