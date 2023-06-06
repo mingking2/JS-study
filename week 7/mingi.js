@@ -21,24 +21,19 @@ const addTodo = (event) => {
         event.preventDefault(); // 기본 동작 방지
 
         const todoInput = document.querySelector('.todo-input');
-
       
         if(todoInput.value.trim() === "") {
             alert("내용이 비엇다");
             return;
         }
 
-        console.log(todoInput.value);
-
         for(let value of todoData.values()) {
-            console.log(value);
             if(value === todoInput.value) {
                 alert("중복이 있다");
                 todoInput.value = "";
                 return;
             }
         }
-
 
         todoData.set(number, todoInput.value);
 
