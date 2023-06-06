@@ -20,17 +20,27 @@ const addTodo = (event) => {
     if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 13)) {
         event.preventDefault(); // 기본 동작 방지
 
-        const todoInput = document.querySelector('.todo-input').value;
+        const todoInput = document.querySelector('.todo-input');
 
-        console.log(todoInput);
-        if(todoInput.trim() === "") {
+      
+        if(todoInput.value.trim() === "") {
             alert("내용이 비엇다");
             return;
         }
-        
-        // 중복검사 if()
 
-        todoData.set(todoInput, number);
+        console.log(todoInput.value);
+
+        for(let value of todoData.values()) {
+            console.log(value);
+            if(value === todoInput.value) {
+                alert("중복이 있다");
+                todoInput.value = "";
+                return;
+            }
+        }
+
+
+        todoData.set(number, todoInput.value);
 
         const todoList = document.querySelector('.todo-list');
 
@@ -39,7 +49,7 @@ const addTodo = (event) => {
         div.setAttribute("id", number);
 
         const li = document.createElement('li');
-        li.innerHTML = todoInput;
+        li.innerHTML = todoInput.value;
 
         const checkbox = document.createElement('input');
         checkbox.type = "checkbox";
@@ -53,9 +63,8 @@ const addTodo = (event) => {
         todoList.appendChild(div);
         number++;
 
-       
-
         console.log(todoData);
+        todoInput.value = "";
     }
 }
 
