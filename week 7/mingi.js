@@ -21,14 +21,14 @@ const addTodo = (event) => {
         event.preventDefault(); // 기본 동작 방지
 
         const todoInput = document.querySelector('.todo-input');
-      
-        if(todoInput.value.trim() === "") {
+
+        if (todoInput.value.trim() === "") {
             alert("내용이 비엇다");
             return;
         }
 
-        for(let value of todoData.values()) {
-            if(value === todoInput.value) {
+        for (let value of todoData.values()) {
+            if (value === todoInput.value) {
                 alert("중복이 있다");
                 todoInput.value = "";
                 return;
@@ -43,12 +43,12 @@ const addTodo = (event) => {
         div.setAttribute("class", "todo-item");
         div.setAttribute("id", number);
 
-        const li = document.createElement('li');
-        li.setAttribute("class","content");
-        li.innerHTML = todoInput.value;
+        const input = document.createElement('input');
+        input.setAttribute("class", "content");
+        input.value = todoInput.value;
 
         const checkbox = document.createElement('input');
-        checkbox.setAttribute("class","checkbox");
+        checkbox.setAttribute("class", "checkbox");
         checkbox.type = "checkbox";
 
         const delBtn = document.createElement('button');
@@ -56,7 +56,7 @@ const addTodo = (event) => {
         delBtn.innerHTML = 'X';
 
         div.appendChild(checkbox);
-        div.appendChild(li);
+        div.appendChild(input);
         div.appendChild(delBtn);
         todoList.appendChild(div);
         number++;
@@ -65,6 +65,27 @@ const addTodo = (event) => {
         todoInput.value = "";
     }
 }
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && event.target.classList.contains('content')) {
+        const contentInput = event.target;
+        const todoItem = contentInput.parentNode;
+        const itemId = todoItem.getAttribute('id');
+        const savedValue = todoData.get(itemId);
+
+        if (contentInput.value.trim() !== '') {
+            if (contentInput.value !== savedValue) {
+                todoData.set(Number(itemId), contentInput.value);
+                console.log(todoData);
+            } 
+        } else {
+            const originalValue = todoData.get(Number(itemId));
+            contentInput.value = originalValue;
+            alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
+        }
+    }
+});
+
 
 enterBtn.addEventListener('click', addTodo);
 todoInput.addEventListener('keydown', addTodo);
