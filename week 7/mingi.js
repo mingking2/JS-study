@@ -44,12 +44,15 @@ const addTodo = (event) => {
         div.setAttribute("id", number);
 
         const li = document.createElement('li');
+        li.setAttribute("class","content");
         li.innerHTML = todoInput.value;
 
         const checkbox = document.createElement('input');
+        checkbox.setAttribute("class","checkbox");
         checkbox.type = "checkbox";
 
         const delBtn = document.createElement('button');
+        delBtn.setAttribute("class", 'delBtn');
         delBtn.innerHTML = 'X';
 
         div.appendChild(checkbox);
