@@ -10,9 +10,11 @@
 - [Week 2](./week%202): UPDOWN 게임(숫자 맞추기) (태훈.리믹스), 
                         보고서 #1 var, let, const 키워드와 블록 레벨 스코프
 - [Week 3](./week%203): 보고서 #2 순수 함수와 비순수 함수
-- [Week 4](./week%204): 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git), 
+- [Week 4](./week%204): 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git)
+- [Week 5](./week%205): 사이드프로젝트 [TodoList](https://github.com/mingking2/TodoList.git) 계속 진행, 
                         보고서 #3 프로토타입과 __proto__ 접근자 프로퍼티
-- [Week 5](./week%205): 행운의 숫자? (호준.리믹스)
+- [Week 6](./week%206): 행운의 숫자? (호준.리믹스)
+- [Week 7](./week%207): 멋사 투두리스트 제작
 - ...
 
 각 주차의 디렉토리에서는 해당 주차에 진행한 과제와 연습문제를 찾아볼 수 있습니다. 각 과제는 별도의 폴더로 구성되어 있으며, 문제 설명, 내가 작성한 솔루션, 추가적인 설명 등이 포함되어 있습니다.
