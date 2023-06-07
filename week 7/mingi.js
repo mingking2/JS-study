@@ -86,6 +86,16 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+document.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delBtn')) {
+        console.log('삭제버튼이다.');
+    }
+
+    if (event.target.classList.contains('checkbox')) {
+        console.log('체크밗흐이다.');
+    }
+});
+
 
 enterBtn.addEventListener('click', addTodo);
 todoInput.addEventListener('keydown', addTodo);
