@@ -38,7 +38,7 @@ const addTodo = (event) => {
         const todoItem = {
             index: ++indexNum,
             content: todoInput.value,
-            checked: false // 체크박스 유무 초기화
+            checked: 'active' // 체크박스 유무 초기화
         }
 
         todoData.set(indexNum, todoItem);
@@ -48,14 +48,17 @@ const addTodo = (event) => {
         const div = document.createElement('div');
         div.setAttribute("class", "todo-item");
         div.setAttribute("id", indexNum);
+        //div.setAttribute("checked", 'active');
 
         const input = document.createElement('input');
         input.setAttribute("class", "content");
-        input.value = todoInput.value;
+        input.value = todoItem.content;
 
         const checkbox = document.createElement('input');
         checkbox.setAttribute("class", "checkbox");
+        checkbox.setAttribute("data-checked", todoItem.checked)
         checkbox.type = "checkbox";
+
 
         const delBtn = document.createElement('button');
         delBtn.setAttribute("class", 'delBtn');
@@ -65,7 +68,7 @@ const addTodo = (event) => {
         div.appendChild(input);
         div.appendChild(delBtn);
         todoList.appendChild(div);
-        
+
 
         checkItems();
         console.log(todoData);
@@ -75,7 +78,15 @@ const addTodo = (event) => {
 
 const checkItems = () => {
     const leftItems = document.querySelector('.left-items');
-    leftItems.innerHTML = `🥕 오늘 할 일이 ${todoData.size}개 남았습니다 🥕`;
+    // 체크된 항목 개수 구하기
+    let checkedCount = 0;
+    for (const item of todoData.values()) {
+        if (item.checked === 'completed') {
+            checkedCount++;
+        }
+    }
+    const restItems = todoData.size - checkedCount;
+    leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
 document.addEventListener('keydown', (event) => {
@@ -102,21 +113,64 @@ document.addEventListener('click', (event) => {
     if (event.target.classList.contains('delBtn')) {
         const delItem = event.target.parentNode;
         todoData.delete(Number(delItem.id));
-        checkItems();
         console.log(todoData);
         delItem.remove();
     }
 
     if (event.target.classList.contains('checkbox')) {
-        console.log('체크밗흐이다.');
         const checkbox = event.target;
         const todoItem = checkbox.parentNode;
         const itemId = Number(todoItem.id);
         const item = todoData.get(itemId);
-        item.checked = checkbox.checked;
+        item.checked = checkbox.checked ? 'completed' : 'active';
+        const contentElement = todoItem.querySelector('.content');
+        if (item.checked === 'completed') {
+            contentElement.style.textDecoration = 'line-through';
+        } else {
+            contentElement.style.textDecoration = 'none';
+        }
         console.log(todoData);
-        checkItems();
     }
+
+    if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
+        console.log("모두 보여줘");
+        todoData.forEach((_, itemId) => {
+            const todoItem = document.getElementById(itemId);
+            todoItem.style.display = 'flex';
+        });
+    }
+
+    if (event.target.classList.contains('show-active-btn')) {
+        console.log("남은일 보여줘");
+        todoData.forEach((_, itemId) => {
+            const todoItem = document.getElementById(itemId);
+            const todoCheck = todoItem.checkbox;
+            console.log(todoCheck);
+            if(todoItem && todoItem.checkbox.dataset.checked === 'active') {
+                todoItem.style.display = 'flex';
+            } else {
+                todoItem.style.display = 'none';
+            }
+        });
+    }
+
+    if (event.target.classList.contains('show-completed-btn')) {
+        console.log('다한거 보여줘');
+        todoData.forEach((_, itemId) => {
+            const todoItem = document.getElementById(itemId);
+            if(todoItem && todoItem.checked === 'completed') {
+                todoItem.style.display = 'flex';
+            } else {
+                todoItem.style.display = 'none';
+            }
+        });
+    }
+
+    if (event.target.classList.contains('clear-all-btn')) {
+        console.log("초기화해줘");
+    }
+
+    checkItems();
 });
 
 
