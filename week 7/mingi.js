@@ -28,7 +28,7 @@ const addTodo = (event) => {
         }
 
         for (let value of todoData.values()) {
-            if (value === todoInput.value) {
+            if (value.content === todoInput.value) {
                 alert("중복이 있다");
                 todoInput.value = "";
                 return;
@@ -76,6 +76,9 @@ const addTodo = (event) => {
     }
 }
 
+enterBtn.addEventListener('click', addTodo);
+todoInput.addEventListener('keydown', addTodo);
+
 const checkItems = () => {
     const leftItems = document.querySelector('.left-items');
     // 체크된 항목 개수 구하기
@@ -89,27 +92,44 @@ const checkItems = () => {
     leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
+const updateTodoItem  = (contentInput) => {
+    const todoItem = contentInput.parentNode;
+    const itemId = todoItem.getAttribute('id');
+    const savedValue = todoData.get(Number(itemId));
+
+    if (contentInput.value.trim() !== '') {
+        if (contentInput.value !== savedValue.content) {
+            savedValue.content = contentInput.value; // content 속성만 업데이트
+            todoData.set(Number(itemId), savedValue);
+            console.log('업데이트!');
+            console.log(todoData);
+        }
+    } else {
+        const originalValue = todoData.get(Number(itemId));
+        contentInput.value = originalValue.content;
+        alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
+    }
+}
+
+// 엔터로 내용 수정
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && event.target.classList.contains('content')) {
         const contentInput = event.target;
-        const todoItem = contentInput.parentNode;
-        const itemId = todoItem.getAttribute('id');
-        const savedValue = todoData.get(itemId);
-
-        if (contentInput.value.trim() !== '') {
-            if (contentInput.value !== savedValue) {
-                todoData.set(Number(itemId), contentInput.value);
-                console.log(todoData);
-            }
-        } else {
-            const originalValue = todoData.get(Number(itemId));
-            contentInput.value = originalValue;
-            alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
-        }
+        updateTodoItem(contentInput);
     }
 });
 
 document.addEventListener('click', (event) => {
+    // 다른 영역 클릭으로 내용 수정
+    if (!event.target.classList.contains('content')) {
+        const contentInput = document.querySelector('.content');
+        //console.log(contentInput);
+        if (contentInput && contentInput.value !== '') {
+            updateTodoItem(contentInput);
+        }
+    }
+
+    // 삭제 버튼 눌럿을 때
     if (event.target.classList.contains('delBtn')) {
         const delItem = event.target.parentNode;
         todoData.delete(Number(delItem.id));
@@ -117,6 +137,7 @@ document.addEventListener('click', (event) => {
         delItem.remove();
     }
 
+    // 체크박스 기능 사용
     if (event.target.classList.contains('checkbox')) {
         const checkbox = event.target;
         const todoItem = checkbox.parentNode;
@@ -126,27 +147,32 @@ document.addEventListener('click', (event) => {
         const contentElement = todoItem.querySelector('.content');
         if (item.checked === 'completed') {
             contentElement.style.textDecoration = 'line-through';
+            contentElement.disabled = true;
+            checkbox.dataset.checked = 'completed';
         } else {
             contentElement.style.textDecoration = 'none';
+            contentElement.disabled = false;
+            checkbox.dataset.checked = 'active';
         }
         console.log(todoData);
     }
 
+
+    // 미리보기 버튼
     if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
-        console.log("모두 보여줘");
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
             todoItem.style.display = 'flex';
         });
     }
 
+
+    // 남은 일 보여주기
     if (event.target.classList.contains('show-active-btn')) {
-        console.log("남은일 보여줘");
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
-            const todoCheck = todoItem.checkbox;
-            console.log(todoCheck);
-            if(todoItem && todoItem.checkbox.dataset.checked === 'active') {
+            const todoCheck = todoItem.querySelector(".checkbox");
+            if(todoItem && todoCheck.dataset.checked === 'active') {
                 todoItem.style.display = 'flex';
             } else {
                 todoItem.style.display = 'none';
@@ -154,25 +180,30 @@ document.addEventListener('click', (event) => {
         });
     }
 
+
+    // 완료한 일 보여주기
     if (event.target.classList.contains('show-completed-btn')) {
-        console.log('다한거 보여줘');
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
-            if(todoItem && todoItem.checked === 'completed') {
+            const todoCheck = todoItem.querySelector(".checkbox");
+            if(todoItem && todoCheck.dataset.checked === 'completed') {
                 todoItem.style.display = 'flex';
             } else {
                 todoItem.style.display = 'none';
             }
         });
-    }
+    }   
 
+
+    // 초기화 버튼
     if (event.target.classList.contains('clear-all-btn')) {
-        console.log("초기화해줘");
+        const todoList = document.querySelector('.todo-list');
+        todoList.innerHTML = "";
+        indexNum = 0;
+        todoData.clear();
     }
 
     checkItems();
 });
 
 
-enterBtn.addEventListener('click', addTodo);
-todoInput.addEventListener('keydown', addTodo);
