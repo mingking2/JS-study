@@ -13,7 +13,7 @@ const getTime = () => {
 
 setInterval(getTime, 1000);
 
-let number = 0;
+let indexNum = 0;
 const todoData = new Map();
 
 const addTodo = (event) => {
@@ -35,13 +35,19 @@ const addTodo = (event) => {
             }
         }
 
-        todoData.set(number, todoInput.value);
+        const todoItem = {
+            index: ++indexNum,
+            content: todoInput.value,
+            checked: false // 체크박스 유무 초기화
+        }
+
+        todoData.set(indexNum, todoItem);
 
         const todoList = document.querySelector('.todo-list');
 
         const div = document.createElement('div');
         div.setAttribute("class", "todo-item");
-        div.setAttribute("id", number);
+        div.setAttribute("id", indexNum);
 
         const input = document.createElement('input');
         input.setAttribute("class", "content");
@@ -59,11 +65,17 @@ const addTodo = (event) => {
         div.appendChild(input);
         div.appendChild(delBtn);
         todoList.appendChild(div);
-        number++;
+        
 
+        checkItems();
         console.log(todoData);
         todoInput.value = "";
     }
+}
+
+const checkItems = () => {
+    const leftItems = document.querySelector('.left-items');
+    leftItems.innerHTML = `🥕 오늘 할 일이 ${todoData.size}개 남았습니다 🥕`;
 }
 
 document.addEventListener('keydown', (event) => {
@@ -77,7 +89,7 @@ document.addEventListener('keydown', (event) => {
             if (contentInput.value !== savedValue) {
                 todoData.set(Number(itemId), contentInput.value);
                 console.log(todoData);
-            } 
+            }
         } else {
             const originalValue = todoData.get(Number(itemId));
             contentInput.value = originalValue;
@@ -88,11 +100,22 @@ document.addEventListener('keydown', (event) => {
 
 document.addEventListener('click', (event) => {
     if (event.target.classList.contains('delBtn')) {
-        console.log('삭제버튼이다.');
+        const delItem = event.target.parentNode;
+        todoData.delete(Number(delItem.id));
+        checkItems();
+        console.log(todoData);
+        delItem.remove();
     }
 
     if (event.target.classList.contains('checkbox')) {
         console.log('체크밗흐이다.');
+        const checkbox = event.target;
+        const todoItem = checkbox.parentNode;
+        const itemId = Number(todoItem.id);
+        const item = todoData.get(itemId);
+        item.checked = checkbox.checked;
+        console.log(todoData);
+        checkItems();
     }
 });
 
