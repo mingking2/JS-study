@@ -9,8 +9,6 @@ const getTime = () => {
     const seconds = chtime.getSeconds();
     clock.innerHTML = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
-
-
 setInterval(getTime, 1000);
 
 let indexNum = 0;
@@ -48,7 +46,6 @@ const addTodo = (event) => {
         const div = document.createElement('div');
         div.setAttribute("class", "todo-item");
         div.setAttribute("id", indexNum);
-        //div.setAttribute("checked", 'active');
 
         const input = document.createElement('input');
         input.setAttribute("class", "content");
@@ -110,6 +107,9 @@ const updateTodoItem  = (contentInput) => {
         alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
     }
 }
+
+// 태그를 불러와서 태그에 대한 이벤트 리스너 vs document이벤트리스너로 한후 event.target.classList.contains?
+
 
 // 엔터로 내용 수정
 document.addEventListener('keydown', (event) => {
