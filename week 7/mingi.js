@@ -88,10 +88,10 @@ const checkItems = () => {
     leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
-const updateTodoItem = (contentInput) => {
+const updateTodoItem = (contentInput) => { // 매개변수를 id로 받아라
     const todoItem = contentInput.parentNode;
     const itemId = todoItem.getAttribute('id');
-    const savedValue = todoData.get(Number(itemId));
+    const savedValue = todoData.get(Number(itemId)); // Number -> parseInt
 
     if (contentInput.value.trim() !== '') {
         if (contentInput.value !== savedValue.content) {
@@ -112,21 +112,21 @@ const updateTodoItem = (contentInput) => {
 
 // 엔터로 내용 수정
 document.addEventListener('keydown', (event) => {
+    console.log("event 발생");
     if (event.key === 'Enter' && event.target.classList.contains('content')) {
         const contentInput = event.target;
         updateTodoItem(contentInput);
     }
 });
 
-// const parentElement = document.querySelector('.todo-list');
-// parentElement.addEventListener('blur', (event) => {
-//     const contentInput = document.querySelector('.content');
-//     console.log(contentInput);
-//     if (contentInput && contentInput.value !== '') {
-//         updateTodoItem(contentInput);
-//     }
-
-// });
+const parentElement = document.querySelector('.todo-list');
+parentElement.addEventListener('blur', (event) => {
+    const contentInput = document.querySelector('.content');
+    console.log(contentInput);
+    if (contentInput && contentInput.value !== '') {
+        updateTodoItem(contentInput);
+    }
+});
 
 
 document.addEventListener('click', (event) => {
@@ -169,7 +169,7 @@ document.addEventListener('click', (event) => {
     }
 
 
-    // 미리보기 버튼
+    // 모두 보기 버튼
     if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
