@@ -19,7 +19,6 @@ const addTodo = (event) => {
         event.preventDefault(); // 기본 동작 방지
 
         const todoInput = document.querySelector('.todo-input');
-
         if (todoInput.value.trim() === "") {
             alert("내용이 비엇다");
             return;
@@ -89,7 +88,7 @@ const checkItems = () => {
     leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
-const updateTodoItem  = (contentInput) => {
+const updateTodoItem = (contentInput) => {
     const todoItem = contentInput.parentNode;
     const itemId = todoItem.getAttribute('id');
     const savedValue = todoData.get(Number(itemId));
@@ -119,8 +118,20 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+// const parentElement = document.querySelector('.todo-list');
+// parentElement.addEventListener('blur', (event) => {
+//     const contentInput = document.querySelector('.content');
+//     console.log(contentInput);
+//     if (contentInput && contentInput.value !== '') {
+//         updateTodoItem(contentInput);
+//     }
+
+// });
+
+
 document.addEventListener('click', (event) => {
     // 다른 영역 클릭으로 내용 수정
+    // 비효율적인거 같은디
     if (!event.target.classList.contains('content')) {
         const contentInput = document.querySelector('.content');
         //console.log(contentInput);
@@ -172,7 +183,7 @@ document.addEventListener('click', (event) => {
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
             const todoCheck = todoItem.querySelector(".checkbox");
-            if(todoItem && todoCheck.dataset.checked === 'active') {
+            if (todoItem && todoCheck.dataset.checked === 'active') {
                 todoItem.style.display = 'flex';
             } else {
                 todoItem.style.display = 'none';
@@ -186,13 +197,13 @@ document.addEventListener('click', (event) => {
         todoData.forEach((_, itemId) => {
             const todoItem = document.getElementById(itemId);
             const todoCheck = todoItem.querySelector(".checkbox");
-            if(todoItem && todoCheck.dataset.checked === 'completed') {
+            if (todoItem && todoCheck.dataset.checked === 'completed') {
                 todoItem.style.display = 'flex';
             } else {
                 todoItem.style.display = 'none';
             }
         });
-    }   
+    }
 
 
     // 초기화 버튼
