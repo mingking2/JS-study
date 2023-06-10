@@ -1,15 +1,15 @@
 const enterBtn = document.querySelector('.enter');
 const todoInput = document.querySelector('.todo-input');
 
-let indexNum = 0;
-const todoData = new Map();
+export let indexNum = 0;
+export const todoData = new Map();
 
-const addTodo = (event) => {
+export const addTodo = (event) => {
     if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 13)) {
         event.preventDefault(); // 기본 동작 방지
 
         const todoInput = document.querySelector('.todo-input');
-        if(!isDuplicateOrBlank(todoInput)) return;
+        if (!isDuplicateOrBlank(todoInput)) return;
 
         const todoItem = {
             index: ++indexNum,
@@ -26,35 +26,7 @@ const addTodo = (event) => {
     }
 }
 
-const renderTodo = (indexNum, todoData) => {
-    const todoList = document.querySelector('.todo-list');
 
-    const div = document.createElement('div');
-    div.setAttribute("class", "todo-item");
-    div.setAttribute("id", todoData.index);
-
-    const todoItem = todoData.get(indexNum);
-
-    const input = document.createElement('input');
-    input.setAttribute("class", "content");
-    input.value = todoItem.content;
-
-    const checkbox = document.createElement('input');
-    checkbox.setAttribute("class", "checkbox");
-    checkbox.setAttribute("data-checked", todoItem.checked)
-    checkbox.type = "checkbox";
-
-
-    const delBtn = document.createElement('button');
-    delBtn.setAttribute("class", 'delBtn');
-    delBtn.innerHTML = 'X';
-
-    div.appendChild(checkbox);
-    div.appendChild(input);
-    div.appendChild(delBtn);
-    todoList.appendChild(div);
-
-}
 
 enterBtn.addEventListener('click', addTodo);
 todoInput.addEventListener('keydown', addTodo);
@@ -89,34 +61,57 @@ const checkItems = () => {
     leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
-const updateTodoItem = (contentInput) => { // 매개변수를 id로 받아라
-    const todoItem = contentInput.parentNode;
-    const itemId = todoItem.getAttribute('id');
-    const savedValue = todoData.get(Number(itemId)); // Number -> parseInt
+export const updateTodo = (itemId) => { // 매개변수를 id로 받아라
+    const parentDiv = document.getElementById(itemId);
+    const contentInput = parentDiv.querySelector('.content');
+    const savedValue = todoData.get(parseInt(itemId)); // Number -> parseInt
 
-    if (contentInput.value.trim() !== '') {
+    if (isDuplicateOrBlank(contentInput)) {
         if (contentInput.value !== savedValue.content) {
             savedValue.content = contentInput.value; // content 속성만 업데이트
             todoData.set(Number(itemId), savedValue);
-            console.log('업데이트!');
-            console.log(todoData);
+        } else {
+            contentInput.value = savedValue.content;
+            alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
         }
-    } else {
-        const originalValue = todoData.get(Number(itemId));
-        contentInput.value = originalValue.content;
-        alert('내용이 비었습니다. 원래 데이터로 되돌립니다.');
     }
 }
 
-// 태그를 불러와서 태그에 대한 이벤트 리스너 vs document이벤트리스너로 한후 event.target.classList.contains?
+export const toggleTodo = (itemId) => {
+    const parentDiv = document.getElementById(itemId);
+    const checkbox = parentDiv.querySelector('.checkbox');
+    const item = todoData.get(itemId);
+    console.log(itemId);
+    console.log(item);
+    item.checked = checkbox.checked ? 'completed' : 'active';
 
+    const contentElement = parentDiv.querySelector('.content');
+    if (item.checked === 'completed') {
+        contentElement.style.textDecoration = 'line-through';
+        contentElement.disabled = true;
+        checkbox.dataset.checked = 'completed';
+    } else {
+        contentElement.style.textDecoration = 'none';
+        contentElement.disabled = false;
+        checkbox.dataset.checked = 'active';
+    }
+
+}
+
+export const delTodo = (itemId) => {
+    const parentDiv = document.getElementById(itemId);
+    todoData.delete(itemId);
+    console.log(todoData);
+    parentDiv.remove();
+}
 
 // 엔터로 내용 수정
 document.addEventListener('keydown', (event) => {
     console.log("event 발생");
     if (event.key === 'Enter' && event.target.classList.contains('content')) {
-        const contentInput = event.target;
-        updateTodoItem(contentInput);
+        const itemId = event.target.parentNode.id;
+        console.log(itemId);
+        updateTodo(itemId);
     }
 });
 
@@ -124,13 +119,13 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('click', (event) => {
     // 다른 영역 클릭으로 내용 수정
     // 비효율적인거 같은디
-    if (!event.target.classList.contains('content')) {
-        const contentInput = document.querySelector('.content');
-        //console.log(contentInput);
-        if (contentInput && contentInput.value !== '') {
-            updateTodoItem(contentInput);
-        }
-    }
+    // if (!event.target.classList.contains('content')) {
+    //     const itemId = event.target.parentNode.id;
+    //     //console.log(contentInput);
+    //     if (itemId) {
+    //         updateTodo(itemId);
+    //     }
+    // }
 
     // 삭제 버튼 눌럿을 때
     if (event.target.classList.contains('delBtn')) {
@@ -142,21 +137,8 @@ document.addEventListener('click', (event) => {
 
     // 체크박스 기능 사용
     if (event.target.classList.contains('checkbox')) {
-        const checkbox = event.target;
-        const todoItem = checkbox.parentNode;
-        const itemId = Number(todoItem.id);
-        const item = todoData.get(itemId);
-        item.checked = checkbox.checked ? 'completed' : 'active';
-        const contentElement = todoItem.querySelector('.content');
-        if (item.checked === 'completed') {
-            contentElement.style.textDecoration = 'line-through';
-            contentElement.disabled = true;
-            checkbox.dataset.checked = 'completed';
-        } else {
-            contentElement.style.textDecoration = 'none';
-            contentElement.disabled = false;
-            checkbox.dataset.checked = 'active';
-        }
+        const itemId = event.target.parentNode.id;
+        toggleTodo(itemId);
         console.log(todoData);
     }
 
