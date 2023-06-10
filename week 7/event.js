@@ -1,11 +1,10 @@
-import { 
+import {
     addTodo,
     updateTodo,
     toggleTodo,
     delTodo,
     todoData,
-    indexNum,
-} from "./todo";
+} from "./todo.js";
 
 const todoList = document.querySelector(".todo-list");
 const todoInput = document.querySelector(".todo-input");
@@ -27,8 +26,8 @@ const filterTodo = (todoData, checked) => {
 
     todoData.forEach((_, itemId) => {
         const todoItem = todoData.get(itemId);
-        if(todoItem.checked === checked) {
-            filterMap.set(itemId,todoItem);
+        if (todoItem.checked === checked) {
+            filterMap.set(itemId, todoItem);
         }
     });
 
@@ -38,37 +37,61 @@ const filterTodo = (todoData, checked) => {
 const changeStatus = () => {
     if (status === ACTIVE) return filterTodo(todoData, ACTIVE);
     else if (status === COMPLETED) return filterTodo(todoData, COMPLETED);
-    
+
     return todoData;
 }
 
 
-const renderTodo = (indexNum, todoData) => {
-    const todoList = document.querySelector('.todo-list');
+const renderTodo = () => {
+    const renderTodos = changeStatus();
+    console.log(renderTodos);
+    renderTodos.forEach((todo) => {
+        if (!todo) return;
+    
+        const div = document.createElement('div');
+        div.setAttribute("class", "todo-item");
+        div.setAttribute("id", todo.index);
 
-    const div = document.createElement('div');
-    div.setAttribute("class", "todo-item");
-    div.setAttribute("id", indexNum);
+        const input = document.createElement('input');
+        input.setAttribute("class", "content");
+        input.value = todo.content;
 
-    const todoItem = todoData.get(indexNum);
+        const checkbox = document.createElement('input');
+        checkbox.setAttribute("class", "checkbox");
+        checkbox.setAttribute("data-checked", todo.checked)
+        checkbox.type = "checkbox";
 
-    const input = document.createElement('input');
-    input.setAttribute("class", "content");
-    input.value = todoItem.content;
+        const delBtn = document.createElement('button');
+        delBtn.setAttribute("class", 'delBtn');
+        delBtn.innerHTML = 'X';
 
-    const checkbox = document.createElement('input');
-    checkbox.setAttribute("class", "checkbox");
-    checkbox.setAttribute("data-checked", todoItem.checked)
-    checkbox.type = "checkbox";
+        div.appendChild(checkbox);
+        div.appendChild(input);
+        div.appendChild(delBtn);
+
+        const todoList = document.querySelector('.todo-list');
+        todoList.appendChild(div);
+    });
 
 
-    const delBtn = document.createElement('button');
-    delBtn.setAttribute("class", 'delBtn');
-    delBtn.innerHTML = 'X';
+}
 
-    div.appendChild(checkbox);
-    div.appendChild(input);
-    div.appendChild(delBtn);
-    todoList.appendChild(div);
+
+export const activeEventListner = () => {
+    todoInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            addTodo(todoInput.value);
+            todoInput.value = "";
+            todoList.innerHTML = "";
+            renderTodo();
+        }
+    });
+
+    enter.addEventListener('click', () => {
+        addTodo(todoInput.value);
+        todoInput.value = "";
+        todoList.innerHTML = "";
+        renderTodo();
+    });
 
 }

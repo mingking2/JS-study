@@ -1,46 +1,30 @@
-const enterBtn = document.querySelector('.enter');
-const todoInput = document.querySelector('.todo-input');
 
-export let indexNum = 0;
+let indexNum = 0;
 export const todoData = new Map();
 
-export const addTodo = (event) => {
-    if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 13)) {
-        event.preventDefault(); // 기본 동작 방지
+export const addTodo = (todo) => {
+    if (!isDuplicateOrBlank(todo)) return;
 
-        const todoInput = document.querySelector('.todo-input');
-        if (!isDuplicateOrBlank(todoInput)) return;
-
-        const todoItem = {
-            index: ++indexNum,
-            content: todoInput.value,
-            checked: 'active' // 체크박스 유무 초기화
-        }
-
-        todoData.set(indexNum, todoItem);
-
-        renderTodo(indexNum, todoData);
-        checkItems();
-        console.log(todoData);
-        todoInput.value = "";
+    const todoItem = {
+        index: ++indexNum,
+        content: todo,
+        checked: 'active' // 체크박스 유무 초기화
     }
+
+    todoData.set(indexNum, todoItem);    
 }
 
 
-
-enterBtn.addEventListener('click', addTodo);
-todoInput.addEventListener('keydown', addTodo);
-
 const isDuplicateOrBlank = (todoInput) => {
-    if (todoInput.value.trim() === "") {
+    if (todoInput.trim() === "") {
         alert("내용이 비엇다");
         return false;
     }
 
     for (let value of todoData.values()) {
-        if (value.content === todoInput.value) {
+        if (value.content === todoInput) {
             alert("중복이 있다");
-            todoInput.value = "";
+            todoInput = "";
             return false;
         }
     }
@@ -106,89 +90,89 @@ export const delTodo = (itemId) => {
 }
 
 // 엔터로 내용 수정
-document.addEventListener('keydown', (event) => {
-    console.log("event 발생");
-    if (event.key === 'Enter' && event.target.classList.contains('content')) {
-        const itemId = event.target.parentNode.id;
-        console.log(itemId);
-        updateTodo(itemId);
-    }
-});
+// document.addEventListener('keydown', (event) => {
+//     console.log("event 발생");
+//     if (event.key === 'Enter' && event.target.classList.contains('content')) {
+//         const itemId = event.target.parentNode.id;
+//         console.log(itemId);
+//         updateTodo(itemId);
+//     }
+// });
 
 
-document.addEventListener('click', (event) => {
-    // 다른 영역 클릭으로 내용 수정
-    // 비효율적인거 같은디
-    // if (!event.target.classList.contains('content')) {
-    //     const itemId = event.target.parentNode.id;
-    //     //console.log(contentInput);
-    //     if (itemId) {
-    //         updateTodo(itemId);
-    //     }
-    // }
+// document.addEventListener('click', (event) => {
+//     // 다른 영역 클릭으로 내용 수정
+//     // 비효율적인거 같은디
+//     // if (!event.target.classList.contains('content')) {
+//     //     const itemId = event.target.parentNode.id;
+//     //     //console.log(contentInput);
+//     //     if (itemId) {
+//     //         updateTodo(itemId);
+//     //     }
+//     // }
 
-    // 삭제 버튼 눌럿을 때
-    if (event.target.classList.contains('delBtn')) {
-        const delItem = event.target.parentNode;
-        todoData.delete(Number(delItem.id));
-        console.log(todoData);
-        delItem.remove();
-    }
+//     // 삭제 버튼 눌럿을 때
+//     if (event.target.classList.contains('delBtn')) {
+//         const delItem = event.target.parentNode;
+//         todoData.delete(Number(delItem.id));
+//         console.log(todoData);
+//         delItem.remove();
+//     }
 
-    // 체크박스 기능 사용
-    if (event.target.classList.contains('checkbox')) {
-        const itemId = event.target.parentNode.id;
-        toggleTodo(itemId);
-        console.log(todoData);
-    }
-
-
-    // 모두 보기 버튼
-    if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
-        todoData.forEach((_, itemId) => {
-            const todoItem = document.getElementById(itemId);
-            todoItem.style.display = 'flex';
-        });
-    }
+//     // 체크박스 기능 사용
+//     if (event.target.classList.contains('checkbox')) {
+//         const itemId = event.target.parentNode.id;
+//         toggleTodo(itemId);
+//         console.log(todoData);
+//     }
 
 
-    // 남은 일 보여주기
-    if (event.target.classList.contains('show-active-btn')) {
-        todoData.forEach((_, itemId) => {
-            const todoItem = document.getElementById(itemId);
-            const todoCheck = todoItem.querySelector(".checkbox");
-            if (todoItem && todoCheck.dataset.checked === 'active') {
-                todoItem.style.display = 'flex';
-            } else {
-                todoItem.style.display = 'none';
-            }
-        });
-    }
+//     // 모두 보기 버튼
+//     if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
+//         todoData.forEach((_, itemId) => {
+//             const todoItem = document.getElementById(itemId);
+//             todoItem.style.display = 'flex';
+//         });
+//     }
 
 
-    // 완료한 일 보여주기
-    if (event.target.classList.contains('show-completed-btn')) {
-        todoData.forEach((_, itemId) => {
-            const todoItem = document.getElementById(itemId);
-            const todoCheck = todoItem.querySelector(".checkbox");
-            if (todoItem && todoCheck.dataset.checked === 'completed') {
-                todoItem.style.display = 'flex';
-            } else {
-                todoItem.style.display = 'none';
-            }
-        });
-    }
+//     // 남은 일 보여주기
+//     if (event.target.classList.contains('show-active-btn')) {
+//         todoData.forEach((_, itemId) => {
+//             const todoItem = document.getElementById(itemId);
+//             const todoCheck = todoItem.querySelector(".checkbox");
+//             if (todoItem && todoCheck.dataset.checked === 'active') {
+//                 todoItem.style.display = 'flex';
+//             } else {
+//                 todoItem.style.display = 'none';
+//             }
+//         });
+//     }
 
 
-    // 초기화 버튼
-    if (event.target.classList.contains('clear-all-btn')) {
-        const todoList = document.querySelector('.todo-list');
-        todoList.innerHTML = "";
-        indexNum = 0;
-        todoData.clear();
-    }
+//     // 완료한 일 보여주기
+//     if (event.target.classList.contains('show-completed-btn')) {
+//         todoData.forEach((_, itemId) => {
+//             const todoItem = document.getElementById(itemId);
+//             const todoCheck = todoItem.querySelector(".checkbox");
+//             if (todoItem && todoCheck.dataset.checked === 'completed') {
+//                 todoItem.style.display = 'flex';
+//             } else {
+//                 todoItem.style.display = 'none';
+//             }
+//         });
+//     }
 
-    checkItems();
-});
+
+//     // 초기화 버튼
+//     if (event.target.classList.contains('clear-all-btn')) {
+//         const todoList = document.querySelector('.todo-list');
+//         todoList.innerHTML = "";
+//         indexNum = 0;
+//         todoData.clear();
+//     }
+
+//     checkItems();
+// });
 
 
