@@ -142,4 +142,8 @@ export const activeEventListner = () => {
         }
     });
 
+    all.addEventListener('click', () => {
+        
+    })
+
 }
