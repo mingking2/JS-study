@@ -31,7 +31,6 @@ const filterTodo = (todoData, checked) => {
         }
     });
 
-    console.log(filterMap);
     return filterMap;
 }
 
