@@ -3,6 +3,7 @@ import {
     updateTodo,
     toggleTodo,
     delTodo,
+    delAll,
     todoData,
 } from "./todo.js";
 
@@ -16,14 +17,13 @@ const completed = document.getElementById("completed");
 const clear = document.getElementById("clear");
 
 const ALL = "all";
-const ACTIVE = "acitve";
+const ACTIVE = "active";
 const COMPLETED = "completed";
 
 let status = ALL;
 
 const filterTodo = (todoData, checked) => {
     const filterMap = new Map();
-
     todoData.forEach((_, itemId) => {
         const todoItem = todoData.get(itemId);
         if (todoItem.checked === checked) {
@@ -31,6 +31,7 @@ const filterTodo = (todoData, checked) => {
         }
     });
 
+    console.log(filterMap);
     return filterMap;
 }
 
@@ -43,6 +44,7 @@ const changeStatus = () => {
 
 
 const renderTodo = () => {
+    todoList.innerHTML = "";
     const renderTodos = changeStatus();
 
     let checkedCount = 0;
@@ -94,6 +96,27 @@ const renderTodo = () => {
     leftItems.innerHTML = `🥕 오늘 할 일이 ${restItems}개 남았습니다 🥕`;
 }
 
+// 자식노드를 제거한는 방법이랑 그냥 innerHTML = ""으로 하는거중에 뭐가 낫나여?
+
+const changeBtn = (ch) => {
+    status = ch;
+    document.querySelector('.selected').classList.remove("selected");
+
+    switch (ch) {
+        case ALL:
+            all.classList.add("selected");
+            break;
+        case ACTIVE:
+            active.classList.add("selected");
+            break;
+        case COMPLETED:
+            completed.classList.add("selected");
+            break;
+        default:
+            break;
+    }
+}
+
 
 export const activeEventListner = () => {
     // Create to enter
@@ -101,7 +124,6 @@ export const activeEventListner = () => {
         if (event.key === 'Enter') {
             addTodo(todoInput.value);
             todoInput.value = "";
-            todoList.innerHTML = "";
             renderTodo();
         }
     });
@@ -110,7 +132,6 @@ export const activeEventListner = () => {
     enter.addEventListener('click', () => {
         addTodo(todoInput.value);
         todoInput.value = "";
-        todoList.innerHTML = "";
         renderTodo();
     });
 
@@ -121,7 +142,6 @@ export const activeEventListner = () => {
                 if (event.key === "Enter") {
                     const itemId = parseInt(event.target.parentNode.id);
                     updateTodo(itemId);
-                    todoList.innerHTML = "";
                     renderTodo();
                 }
             });
@@ -132,18 +152,32 @@ export const activeEventListner = () => {
         if (event.target.className === "checkbox") {
             const itemId = parseInt(event.target.parentNode.id);
             toggleTodo(itemId);
-            todoList.innerHTML = "";
             renderTodo();
         } else if (event.target.className === "delBtn") {
             const itemId = parseInt(event.target.parentNode.id);
             delTodo(itemId);
-            todoList.innerHTML = "";
             renderTodo();
         }
     });
 
     all.addEventListener('click', () => {
-        
-    })
+        changeBtn(ALL);
+        renderTodo();
+    });
+
+    active.addEventListener('click', () => {
+        changeBtn(ACTIVE);
+        renderTodo();
+    });
+
+    completed.addEventListener('click', () => {
+        changeBtn(COMPLETED);
+        renderTodo();
+    });
+
+    clear.addEventListener('click', () => {
+        delAll();
+        renderTodo();
+    });
 
 }

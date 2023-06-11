@@ -62,7 +62,15 @@ export const delTodo = (itemId) => {
     parentDiv.remove();
 }
 
+export const delAll = () => {
+    if(todoData.size === 0) {
+        alert('삭제할 데이터가 없다');
+        return;
+    }
 
+    indexNum = 0;
+    todoData.clear();
+}
 
 
 // document.addEventListener('click', (event) => {

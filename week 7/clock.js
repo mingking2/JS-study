@@ -8,4 +8,9 @@ const getTime = () => {
     clock.innerHTML = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 }
 
-setInterval(getTime, 0);
+
+window.addEventListener('load', () => {
+    getTime();
+
+    setInterval(getTime, 10);
+});
