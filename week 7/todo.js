@@ -10,7 +10,7 @@ export const addTodo = (todo) => {
         checked: 'active' // 체크박스 유무 초기화
     }
 
-    todoData.set(indexNum, todoItem);    
+    todoData.set(indexNum, todoItem);
 }
 
 
@@ -63,7 +63,7 @@ export const delTodo = (itemId) => {
 }
 
 export const delAll = () => {
-    if(todoData.size === 0) {
+    if (todoData.size === 0) {
         alert('삭제할 데이터가 없다');
         return;
     }
@@ -71,72 +71,4 @@ export const delAll = () => {
     indexNum = 0;
     todoData.clear();
 }
-
-
-// document.addEventListener('click', (event) => {
-//     
-//     // 삭제 버튼 눌럿을 때
-//     if (event.target.classList.contains('delBtn')) {
-//         const delItem = event.target.parentNode;
-//         todoData.delete(Number(delItem.id));
-//         console.log(todoData);
-//         delItem.remove();
-//     }
-
-//     // 체크박스 기능 사용
-//     if (event.target.classList.contains('checkbox')) {
-//         const itemId = event.target.parentNode.id;
-//         toggleTodo(itemId);
-//         console.log(todoData);
-//     }
-
-
-//     // 모두 보기 버튼
-//     if (event.target.classList.contains('show-all-btn') && event.target.classList.contains('selected')) {
-//         todoData.forEach((_, itemId) => {
-//             const todoItem = document.getElementById(itemId);
-//             todoItem.style.display = 'flex';
-//         });
-//     }
-
-
-//     // 남은 일 보여주기
-//     if (event.target.classList.contains('show-active-btn')) {
-//         todoData.forEach((_, itemId) => {
-//             const todoItem = document.getElementById(itemId);
-//             const todoCheck = todoItem.querySelector(".checkbox");
-//             if (todoItem && todoCheck.dataset.checked === 'active') {
-//                 todoItem.style.display = 'flex';
-//             } else {
-//                 todoItem.style.display = 'none';
-//             }
-//         });
-//     }
-
-
-//     // 완료한 일 보여주기
-//     if (event.target.classList.contains('show-completed-btn')) {
-//         todoData.forEach((_, itemId) => {
-//             const todoItem = document.getElementById(itemId);
-//             const todoCheck = todoItem.querySelector(".checkbox");
-//             if (todoItem && todoCheck.dataset.checked === 'completed') {
-//                 todoItem.style.display = 'flex';
-//             } else {
-//                 todoItem.style.display = 'none';
-//             }
-//         });
-//     }
-
-
-//     // 초기화 버튼
-//     if (event.target.classList.contains('clear-all-btn')) {
-//         const todoList = document.querySelector('.todo-list');
-//         todoList.innerHTML = "";
-//         indexNum = 0;
-//         todoData.clear();
-//     }
-
-//     checkItems();
-// });
-
 
