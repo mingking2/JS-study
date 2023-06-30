@@ -23,7 +23,7 @@ const isDuplicateOrBlank = (todoInput) => {
     for (let value of todoData.values()) {
         if (value.content === todoInput) {
             alert("중복이 있다");
-            todoInput = "";
+            todoInput = "";      
             return false;
         }
     }

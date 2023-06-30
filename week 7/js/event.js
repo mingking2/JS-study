@@ -66,7 +66,7 @@ const renderTodo = () => {
         input.value = todo.content;
 
         const checkbox = document.createElement('input');
-        checkbox.setAttribute("class", "checkbox");
+        checkbox.setAttribute("class", "checkbox");     
         checkbox.setAttribute("data-checked", todo.checked)
         checkbox.type = "checkbox";
         checkbox.checked = todo.checked === 'completed';
