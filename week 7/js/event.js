@@ -66,7 +66,7 @@ const renderTodo = () => {
         input.value = todo.content;
 
         const checkbox = document.createElement('input');
-        checkbox.setAttribute("class", "checkbox");     
+        checkbox.setAttribute("class", "checkbox");
         checkbox.setAttribute("data-checked", todo.checked)
         checkbox.type = "checkbox";
         checkbox.checked = todo.checked === 'completed';
@@ -135,15 +135,26 @@ export const activeEventListner = () => {
     });
 
     // Update
-    todoList.addEventListener("dblclick", (event) => {
+    todoList.addEventListener("focusin", (event) => {
         if (event.target.className === "content") {
-            event.target.addEventListener('keydown', (event) => {
-                if (event.key === "Enter") {
-                    const itemId = parseInt(event.target.parentNode.id);
+            const inputElement = event.target;
+            const previousValue = inputElement.value;
+            console.log("1 " + previousValue);
+
+            const focusoutListener = () => {
+                const currentValue = inputElement.value;
+                console.log("2 " + currentValue);
+
+                if (currentValue !== previousValue) {
+                    const itemId = parseInt(inputElement.parentNode.id);
                     updateTodo(itemId);
                     renderTodo();
                 }
-            });
+
+                inputElement.removeEventListener("focusout", focusoutListener);
+            };
+
+            inputElement.addEventListener("focusout", focusoutListener);
         }
     });
 
