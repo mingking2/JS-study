@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>비동기 자바스크립트 예제</h2>
+    <p>console 창을 확인 해 주세요.</p>
+    <script>
+
+      let num = 0;
+      
+      // 콜백인데 왜 안될까 ㅋㅋ
+      /*
+      const callback = () => {
+        if(num != 50) console.log(num);
+        else return;
+      }
+
+      const a = (callback) => {
+        num += 10;
+        return callback;
+      }
+      
+      setInterval(a(callback), 1000)
+      */
+     
+
+      // 프로미스 쓰긴함 ㅋㅋ
+      const a = () => {
+        num += 10;
+        console.log(num);
+      }
+      const c = () => {
+        return new Promise((resolve, reject) => {
+                if(num != 50) resolve(a());
+                else reject(new Error());      
+        });
+      }
+
+      setInterval(c, 1000);
+      
+     
+    </script>
+  </body>
+</html>
+
+
